@@ -320,7 +320,25 @@
                     <!--## amount_total_due_currency-->
                     <div class="act_as_cell" />
                     <!--## amount_residual_currency-->
-                    <div class="act_as_cell" />
+                    <t t-if="foreign_currency_id">
+                        <div class="act_as_cell amount" style="width: 6.57%;">
+                            <t t-if='type == "account_type"'>
+                                <span
+                                    t-esc="total_amount[account_id]['residual_currency']"
+                                    t-options="{'widget': 'monetary', 'display_currency': env['res.currency'].browse(foreign_currency_id)}"
+                                />
+                            </t>
+                            <t t-if='type == "partner_type"'>
+                                <span
+                                    t-esc="total_amount[account_id][partner_id]['residual_currency']"
+                                    t-options="{'widget': 'monetary', 'display_currency': env['res.currency'].browse(foreign_currency_id)}"
+                                />
+                            </t>
+                        </div>
+                    </t>
+                    <t t-else="">
+                        <div class="act_as_cell" />
+                    </t>
                 </t>
             </div>
         </div>

@@ -106,11 +106,13 @@ class OpenItemsReport(models.AbstractModel):
         ]
 
         company = self.env["res.company"].browse(company_id)
-        move_currency_id = move_lines[0]['currency_id'][0]
-        move_lines_have_same_currency = all(
-            element['currency_id'] == move_lines[0]['currency_id'] for element in move_lines)
-        foreign_currency_id = move_currency_id \
-            if move_lines_have_same_currency and move_currency_id != company.currency_id.id else False
+        move_currency_id = move_lines and move_lines[0]['currency_id'][0] or False
+        foreign_currency_id = False
+        if move_currency_id:
+            move_lines_have_same_currency = all(
+                element['currency_id'] == move_lines[0]['currency_id'] for element in move_lines)
+            foreign_currency_id = move_currency_id \
+                if move_lines_have_same_currency and move_currency_id != company.currency_id.id else False
 
         open_items_move_lines_data = {}
         for move_line in move_lines:
